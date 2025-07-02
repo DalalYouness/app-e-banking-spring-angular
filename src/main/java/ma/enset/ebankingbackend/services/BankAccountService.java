@@ -1,5 +1,6 @@
 package ma.enset.ebankingbackend.services;
 
+import ma.enset.ebankingbackend.dtos.CustomerDTO;
 import ma.enset.ebankingbackend.entities.BankAccount;
 import ma.enset.ebankingbackend.entities.CurrentAccount;
 import ma.enset.ebankingbackend.entities.Customer;
@@ -15,7 +16,7 @@ public interface BankAccountService {
     Customer saveCustomer(Customer customer);
     CurrentAccount saveCurrentBankAccount(double initialBalance, double overDraft , Long CustomerId) throws CustomerNotFoundException;
     SavingAccount saveSavingBankAccount(double initialBalance, double interestRate , Long CustomerId) throws CustomerNotFoundException;
-    List<Customer> listCustomers();
+    List<CustomerDTO> listCustomers();
     BankAccount getBankAccount(String accountId) throws BankAccountNotFoundException;
     void debit(String accountId, double amount,String description) throws BankAccountNotFoundException, BalanceNotSufficentException;
     void credit(String accountId, double amount,String description) throws BankAccountNotFoundException;
