@@ -1,5 +1,6 @@
 package ma.enset.ebankingbackend;
 
+import ma.enset.ebankingbackend.dtos.CustomerDTO;
 import ma.enset.ebankingbackend.entities.*;
 import ma.enset.ebankingbackend.exceptions.BalanceNotSufficentException;
 import ma.enset.ebankingbackend.exceptions.BankAccountNotFoundException;
@@ -25,7 +26,7 @@ public class EbankingBackendApplication {
     CommandLineRunner start(BankAccountService bankAccountService) {
         return args -> {
             Stream.of("Youness","Ahmed","Yassin").forEach(name -> {
-                Customer customer = new Customer();
+                CustomerDTO customer = new CustomerDTO();
                 customer.setName(name);
                 customer.setEmail(name + "@gmail.com");
                 bankAccountService.saveCustomer(customer);

@@ -2,7 +2,6 @@ package ma.enset.ebankingbackend.services;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import lombok.extern.slf4j.Slf4j;
 import ma.enset.ebankingbackend.dtos.CustomerDTO;
 import ma.enset.ebankingbackend.entities.*;
@@ -14,14 +13,11 @@ import ma.enset.ebankingbackend.mappers.BankAccountMapperImpl;
 import ma.enset.ebankingbackend.repositories.AccountOperationRepository;
 import ma.enset.ebankingbackend.repositories.BankAccountRepository;
 import ma.enset.ebankingbackend.repositories.CustomerRepository;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
-import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,18 +33,27 @@ public class BankAccountServiceImpl implements BankAccountService {
     private final BankAccountMapperImpl bankAccountMapper;
 
     @Override
-    public Customer saveCustomer(Customer customer) {
+    public CustomerDTO saveCustomer(CustomerDTO customerDTO) {
         log.info("Saving a New customer");// message log
-        Customer Addedcustomer = customerRepository.save(customer);
-        return Addedcustomer;
+        Customer customer  = bankAccountMapper.customerDTOToCustomer(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return bankAccountMapper.customerToCustomerDTO(savedCustomer);
     }
 
+    // get full customer
     @Override
     public Customer getCustomerById(Long customerId) throws CustomerNotFoundException {
 
         Customer customer = customerRepository.findById(customerId)
                 .orElseThrow(() ->  new CustomerNotFoundException("Customer not found"));
         return customer;
+    }
+
+    // getcustomerDto
+    @Override
+    public CustomerDTO getCustomer(Long customerId) throws CustomerNotFoundException {
+        Customer customer = getCustomerById(customerId);
+        return bankAccountMapper.customerToCustomerDTO(customer);
     }
 
     @Override
@@ -145,4 +150,17 @@ public class BankAccountServiceImpl implements BankAccountService {
         return bankAccountRepository.findAll();
     }
 
+    @Override
+    public CustomerDTO updateCustomer(CustomerDTO customerDTO) {
+        log.info("Saving a New customer");// message log
+        Customer customer  = bankAccountMapper.customerDTOToCustomer(customerDTO);
+        Customer savedCustomer = customerRepository.save(customer);
+        return bankAccountMapper.customerToCustomerDTO(savedCustomer);
+    }
+
+    @Override
+    public void deleteCustomerById(Long id)  {
+        //CustomerDTO customer = getCustomer(id);
+        customerRepository.deleteById(id);
+    }
 }
